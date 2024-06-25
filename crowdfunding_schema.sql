@@ -2,6 +2,7 @@
 -- Link to schema: https://app.quickdatabasediagrams.com/#/d/Ad8rtv
 -- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
+--contacts running dont remove
 DROP TABLE IF EXISTS contacts;
 CREATE TABLE "Contacts" (
     "contact_id" INT   NOT NULL,
@@ -15,7 +16,7 @@ CREATE TABLE "Contacts" (
 
 DROP TABLE IF EXISTS category;
 
-CREATE TABLE "Category" (
+CREATE TABLE Category (
     "category_id" VARCHAR   NOT NULL,
     "category" VARCHAR   NOT NULL,
     CONSTRAINT "pk_Category" PRIMARY KEY (
@@ -56,30 +57,36 @@ CREATE TABLE "Campaign" (
 	
 );
 
-ALTER TABLE "Contacts" ADD CONSTRAINT "fk_Contacts_contact_id" FOREIGN KEY("contact_id")
-REFERENCES "Campaign" ("contact_id");
 
-ALTER TABLE "Category" ADD CONSTRAINT "fk_Category_category_id" FOREIGN KEY("category_id")
-REFERENCES "Campaign" ("category_id");
+ALTER TABLE "Campaign" ADD CONSTRAINT "fk_Campaign_contact_id" FOREIGN KEY("contact_id")
+REFERENCES "Contacts" ("contact_id");
 
-ALTER TABLE "Subcategory" ADD CONSTRAINT "fk_Subcategory_subcategory_id" FOREIGN KEY("subcategory_id")
-REFERENCES "Campaign" ("subcategory_id");
+ALTER TABLE "Campaign" ADD CONSTRAINT "fk_Campaign_category_id" FOREIGN KEY("category_id")
+REFERENCES "category" ("category_id");
+
+ALTER TABLE "Campaign" ADD CONSTRAINT "fk_Campaign_subcategory_id" FOREIGN KEY("subcategory_id")
+REFERENCES "Subcategory" ("subcategory_id");
 
 --Run before import to check that the tables are created correctly
 --Import campaign last because of dependencies
 --Run after import to check that the tables are populated correctly
 
+SHOW_ search_path;
 
 -- display contact;
-SELECT * FROM contacts;
+SELECT * FROM public."Contacts"
+ORDER BY contact_id ASC LIMIT 100
 
 -- display category
 
-SELECT * FROM category;
+SELECT * FROM public.category
+ORDER BY category_id ASC LIMIT 100
 
 -- display subcategory
-SELECT * FROM subcategory;
+SELECT * FROM public."Subcategory"
+ORDER BY subcategory_id ASC LIMIT 100
 
 
 -- display campaign
-SELECT * FROM campaign;
+SELECT * FROM public."Campaign"
+ORDER BY cf_id ASC LIMIT 100
